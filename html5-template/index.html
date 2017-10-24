@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>html5-template</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="data.js"></script>
+</head>
+<body>
+<!-- Template Content -->
+<template id="myTemplate">
+    <p>Template content. Click again...</p>
+</template>
+
+<!-- Normal Content -->
+<div id="normalContent">
+    <p>Normal content</p>
+</div>
+
+<!-- JavaScript function: Clones the template and appends it to the normal content -->
+<button onclick="useTemplate();">Click Me to Use the Template!</button>
+<script>
+    function useTemplate() {
+        var myTemplate = document.getElementById('myTemplate'),
+            normalContent = document.getElementById('normalContent'),
+            clonedTemplate = myTemplate.content.cloneNode(true);
+        normalContent.appendChild(clonedTemplate);
+    }
+</script>
+
+</body>
+</html>

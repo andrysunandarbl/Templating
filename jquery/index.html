@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jquery-pemweb2</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+</head>
+<body>
+<input id = "btnSubmit" type="submit" value="Release"/>
+<script>
+    // A $( document ).ready() block.
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        $("#btnSubmit").click(function(){
+            alert("button");
+        });
+    });
+</script>
+<p>First Paragraph</p>
+<p>Second Paragraph</p>
+<p>Yet one more Paragraph</p>
+
+<script>
+    $( "p" ).click(function() {
+        $( this ).slideUp();
+    });
+</script>
+
+<p id="demo" onclick="myFunction()">Click me to change my text color.</p>
+
+<script>
+    function myFunction() {
+        document.getElementById("demo").style.color = "red";
+    }
+</script>
+</body>
+</html>
