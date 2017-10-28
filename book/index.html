@@ -62,7 +62,7 @@
             var url = "http://localhost:8000/api/book/search";
             console.log("search text : "+searchText);
             // mustache template
-            var template = "<h1>{{title}}</h1>location: {{location}}, publisher: {{publisher}}";
+            var template = "<h1>{{title}}</h1>location: {{location}}, publisher: {{publisher}}, rack no: {{rackNo}}, year: {{year}}";
             // create variable book
             var book = {};
             // reset isi input box untuk search
@@ -83,11 +83,15 @@
                         console.log(data.content[index].title);
                         console.log(data.content[index].location);
                         console.log(data.content[index].publisher);
+                        console.log(data.content[index].year);
+                        console.log(data.content[index].rackNo);
                         // assign api result to local book variable
                         book.id = data.content[index].id;
                         book.title = data.content[index].title;
                         book.location = data.content[index].location;
                         book.publisher = data.content[index].publisher;
+                        book.year = data.content[index].year;
+                        book.rackNo = data.content[index].rackNo;
                         // isi hasil pencarian kedalam template html
                         var html = Mustache.to_html(template, book);
                         // append resut pada div id=resultPage di halaman utama
