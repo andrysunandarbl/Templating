@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Budi-Book Store</title>
+    <link rel="icon" href="https://getbootstrap.com/docs/3.3/favicon.ico">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
+
+    <style>
+        html {
+            margin: 200px auto;
+        }
+        .btn-search {
+            background: #424242;
+            border-radius: 0;
+            color: #fff;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #1c1c1c;
+        }
+        .btn-search:link, .btn-search:visited {
+            color: #fff;
+        }
+        .btn-search:active, .btn-search:hover {
+            background: #1c1c1c;
+            color: #fff;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <div class="input-group">
+        <input type="text" class="form-control" id="search_text" placeholder="Search for...">
+        <span class="input-group-btn">
+        <button class="btn btn-search" type="button" id="search"><i class="fa fa-search fa-fw"></i> Search</button>
+      </span>
+    </div>
+    <div>
+        <div id="resultPage"></div>
+    </div>
+</div>
+<script>
+    // fungsi untuk mengunggu halaman telah siap atau semua file css/js telah di load semua
+    $(document).ready(function(){
+        //fungsi event click button dengan id=search
+        $("#search").click(function(){
+            // assign variable searchText dengan nilai yang ada di input box dengan id=search_text
+            var searchText = $("#search_text").val();
+            // alamat server api
+            var url = "http://localhost:8000/api/book/search";
+            console.log("search text : "+searchText);
+            // mustache template
+            var template = "<h1>{{title}}</h1>location: {{location}}, publisher: {{publisher}}";
+            // create variable book
+            var book = {};
+            // reset isi input box untuk search
+            $("#resultPage").empty();
+            // start ajax request
+            $.ajax({
+                type:"GET",
+                url: url,
+                data: {"name":searchText,"page":0,"size":5},
+                dataType: "jsonp",
+                jsonpCallback: 'callback',
+                crossDomain: true,
+                success: function(data){
+                    console.log(data);
+                    // looping hasil data dari api karena search pasti dalam bentuk array/list
+                    $.each(data.content, function(index) {
+                        console.log(data.content[index].id);
+                        console.log(data.content[index].title);
+                        console.log(data.content[index].location);
+                        console.log(data.content[index].publisher);
+                        // assign api result to local book variable
+                        book.id = data.content[index].id;
+                        book.title = data.content[index].title;
+                        book.location = data.content[index].location;
+                        book.publisher = data.content[index].publisher;
+                        // isi hasil pencarian kedalam template html
+                        var html = Mustache.to_html(template, book);
+                        // append resut pada div id=resultPage di halaman utama
+                        $("#resultPage").prepend(html);
+                    });
+                }
+            });
+        });
+
+    });
+</script>
+</body>
+</html>
