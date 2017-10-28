@@ -3,6 +3,3 @@ db:
   connection:    
     username: demo
     password: 'd3m0!@#'
-    hostName: 127.0.0.1
-    hostPort: 3306
-    databaseName: pemweb_db
