@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jquery-pemweb2</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
+
+    <script src="sockjs.min.js"></script>
+    <script src="stomp.min.js"></script>
+</head>
+<body>
+<input id="btnStart" type="button" value="Start Monitoring" />
+<!--Your new content will be displayed in here-->
+<div id="dataClassroom"></div>
+<script>
+    var stompClient = null;
+    // A $( document ).ready() block.
+    $( document ).ready(function() {
+        console.log( "ready!" );
+
+        $("#btnStart").click(function(){
+            var socket = new SockJS('http://localhost:8080/temperature');
+            var template = "<h3>temperature: {{temperature}} Celcius </br> humidity: {{humidity}} % </br> pressure: {{pressure}} bar</h3>";
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/classroom', function (message) {
+                    var classroom = JSON.parse(message.body);
+                    console.log("temperature : "+classroom.temperature);
+                    console.log("humidity : "+classroom.humidity);
+                    console.log("pressure : "+classroom.pressure);
+                    //console.log(JSON.parse(message.body));
+                    var html = Mustache.to_html(template, classroom);
+                    $('#dataClassroom').html(html);
+
+                });
+            });
+        });
+    });
+</script>
+</body>
+</html>
